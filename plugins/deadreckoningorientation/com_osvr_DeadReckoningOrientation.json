@@ -1,0 +1,19 @@
+{
+  "deviceVendor": "OSVR",
+  "deviceName": "Dead-Reckoning Orientation Tracker",
+  "author": "Russ Taylor <russ@reliasolve.com>",
+  "version": 1,
+  "lastModified": "2015-03-27T13:29:0.000Z",
+  "interfaces": {
+    "tracker": {
+      "count": 1,
+      "position": false,
+      "orientation": true
+    }
+  },
+  "semantics": {
+    "value": {
+      "$target": "tracker/0"
+    }
+  }
+}
