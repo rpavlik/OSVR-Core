@@ -20,8 +20,8 @@ foreach(server BasicServer osvr_server osvr_calibrate)
         FOLDER "OSVR Stock Applications")
 endforeach()
 
-target_link_libraries(osvr_server jsoncpp_lib)
-target_link_libraries(osvr_calibrate jsoncpp_lib osvrClientKitCpp osvrCommon eigen-headers boost_thread ${Boost_PROGRAM_OPTIONS_LIBRARIES})
+target_link_libraries(osvr_server ${JSONCPP_LIBRARY})
+target_link_libraries(osvr_calibrate ${JSONCPP_LIBRARY} osvrClientKitCpp osvrCommon eigen-headers boost_thread ${Boost_PROGRAM_OPTIONS_LIBRARIES})
 
 add_executable(osvr_reset_yaw
     osvr_reset_yaw.cpp
@@ -29,7 +29,7 @@ add_executable(osvr_reset_yaw
     ClientMainloopThread.h
     RecomposeTransform.h
     WrapRoute.h)
-target_link_libraries(osvr_reset_yaw jsoncpp_lib osvrClientKitCpp osvrClient osvrCommon eigen-headers boost_thread ${Boost_PROGRAM_OPTIONS_LIBRARIES})
+target_link_libraries(osvr_reset_yaw ${JSONCPP_LIBRARY} osvrClientKitCpp osvrClient osvrCommon eigen-headers boost_thread ${Boost_PROGRAM_OPTIONS_LIBRARIES})
 set_target_properties(osvr_reset_yaw PROPERTIES
     FOLDER "OSVR Stock Applications")
 
@@ -38,7 +38,7 @@ add_executable(diagnose-rotation
     ClientMainloop.h
     ClientMainloopThread.h
     RecomposeTransform.h)
-target_link_libraries(diagnose-rotation jsoncpp_lib osvrClientKitCpp osvrClient osvrCommon eigen-headers boost_thread ${Boost_PROGRAM_OPTIONS_LIBRARIES})
+target_link_libraries(diagnose-rotation ${JSONCPP_LIBRARY} osvrClientKitCpp osvrClient osvrCommon eigen-headers boost_thread ${Boost_PROGRAM_OPTIONS_LIBRARIES})
 set_target_properties(diagnose-rotation PROPERTIES
     FOLDER "OSVR Stock Applications")
 
