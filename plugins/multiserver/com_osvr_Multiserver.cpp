@@ -37,6 +37,7 @@
 #include "com_osvr_Multiserver_OSVRHackerDevKit_json.h"
 #include "com_osvr_Multiserver_OneEuroFilter_json.h"
 #include "com_osvr_Multiserver_RazerHydra_json.h"
+#include "com_osvr_Multiserver_DeadReckoning_json.h"
 
 // Library/third-party includes
 #include "hidapi/hidapi.h"
@@ -168,12 +169,73 @@ class VRPNHardwareDetect : boost::noncopyable {
                     (dev->vendor_id == 0x03EB && dev->product_id == 0x2421)) {
                     gotDevice = true;
                     m_handlePath(dev->path);
+
+                    auto hdkJsonString = osvr::util::makeString(
+                        com_osvr_Multiserver_OSVRHackerDevKit_json);
+                    Json::Value hdkJson;
+                    Json::Reader reader;
+                    if (!reader.parse(hdkJsonString, hdkJson)) {
+                        throw std::logic_error("Faulty JSON file for HDK - "
+                                               "should not be possible!");
+                    }
+
                     osvr::vrpnserver::VRPNDeviceRegistration reg(ctx);
+                    std::string name =
+                        m_data.getName("OSVRHackerDevKit").c_str();
                     reg.constructAndRegisterDevice<
-                        vrpn_Tracker_OSVRHackerDevKit>(
-                        m_data.getName("OSVRHackerDevKit"));
-                    reg.setDeviceDescriptor(osvr::util::makeString(
-                        com_osvr_Multiserver_OSVRHackerDevKit_json));
+                        vrpn_Tracker_OSVRHackerDevKit>(name);
+                    reg.setDeviceDescriptor(hdkJsonString);
+
+                    std::string localName = "*" + name;
+
+                    {
+						
+                        // Copy semantic paths for dead reckoning: just
+                        // want head
+                        Json::Reader reader;
+                        Json::Value deadReckoningJson;
+
+                        if (!reader.parse(
+                                osvr::util::makeString(
+                                    com_osvr_Multiserver_DeadReckoning_json),
+                                deadReckoningJson)) {
+                            throw std::logic_error(
+                                "Faulty JSON file for Dead Reckoning "
+                                "- should not "
+                                "be possible!");
+                        }
+
+
+						
+                        auto &deadReckSem =
+                            (deadReckoningJson["semantic"] = Json::objectValue);
+                        auto &hdkSem = hdkJson["semantic"];
+						deadReckSem = hdkSem;
+						
+                        auto &deadReckAuto =
+                            (deadReckoningJson["automaticAliases"] =
+                                 Json::objectValue);
+                        deadReckAuto["$priority"] =
+                            130; // enough to override a normal automatic route.
+                        auto &hdkAuto = hdkJson["automaticAliases"];
+                        for (auto const &element : {"/me/head"}) {
+                            deadReckAuto[element] = hdkAuto[element];
+                        }
+						
+                        // Corresponding filter
+                        osvr::vrpnserver::VRPNDeviceRegistration reg(ctx);
+                        reg.registerDevice(
+                            new vrpn_Tracker_DeadReckoning_Rotation(
+                                reg.useDecoratedName(
+                                        m_data.getName("DeadReckoning"))
+                                    .c_str(),
+                                reg.getVRPNConnection(), localName.c_str()));
+
+                        reg.setDeviceDescriptor(
+                            deadReckoningJson.toStyledString());
+						std::cout << deadReckoningJson.toStyledString() << std::endl;
+                    }
+
                     continue;
                 }
             }
