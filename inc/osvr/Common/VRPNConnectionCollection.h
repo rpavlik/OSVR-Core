@@ -37,7 +37,10 @@
 #include <unordered_map>
 
 namespace osvr {
-namespace client {
+namespace common {
+    /// @brief A collection of VRPN connections, held by intrusive pointers,
+    /// that performs "shallow copies" - sharing the same collection behind the
+    /// scenes.
     class VRPNConnectionCollection {
       public:
         VRPNConnectionCollection();
@@ -54,7 +57,7 @@ namespace client {
         shared_ptr<ConnectionMap> m_connMap;
     };
 
-} // namespace client
+} // namespace common
 } // namespace osvr
 
 #endif // INCLUDED_VRPNConnectionCollection_h_GUID_AB4B5310_43DF_4E9A_2EAF_CF512F979288

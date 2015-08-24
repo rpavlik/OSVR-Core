@@ -23,7 +23,7 @@
 // limitations under the License.
 
 // Internal Includes
-#include "VRPNConnectionCollection.h"
+#include <osvr/Common/VRPNConnectionCollection.h>
 
 // Library/third-party includes
 #include <vrpn_Connection.h>
@@ -32,7 +32,7 @@
 // - none
 
 namespace osvr {
-namespace client {
+namespace common {
     VRPNConnectionCollection::VRPNConnectionCollection()
         : m_connMap(make_shared<ConnectionMap>()) {}
 

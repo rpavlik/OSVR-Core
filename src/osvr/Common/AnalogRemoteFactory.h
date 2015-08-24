@@ -22,15 +22,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef INCLUDED_TrackerRemoteFactory_h_GUID_C473E294_CC7C_49A2_C03F_B47458E22EDB
-#define INCLUDED_TrackerRemoteFactory_h_GUID_C473E294_CC7C_49A2_C03F_B47458E22EDB
+#ifndef INCLUDED_AnalogRemoteFactory_h_GUID_F2F60718_042B_44BD_B697_50D3434C72CE
+#define INCLUDED_AnalogRemoteFactory_h_GUID_F2F60718_042B_44BD_B697_50D3434C72CE
 
 // Internal Includes
 #include "VRPNConnectionCollection.h"
 #include <osvr/Common/InterfaceList.h>
 #include <osvr/Common/OriginalSource.h>
 #include <osvr/Util/SharedPtr.h>
-#include "RemoteHandler.h"
+#include <osvr/Common/RemoteHandler.h>
 
 #include <osvr/Common/ClientContext.h>
 
@@ -41,17 +41,14 @@
 // - none
 
 namespace osvr {
-namespace client {
+namespace common {
 
-    class TrackerRemoteFactory {
+    class AnalogRemoteFactory {
       public:
-        TrackerRemoteFactory(VRPNConnectionCollection const &conns);
+        AnalogRemoteFactory(VRPNConnectionCollection const &conns);
 
         template <typename T> void registerWith(T &factory) const {
-            factory.addFactory("tracker", *this);
-            factory.addFactory("pose", *this);
-            factory.addFactory("position", *this);
-            factory.addFactory("orientation", *this);
+            factory.addFactory("analog", *this);
         }
 
         shared_ptr<RemoteHandler>
@@ -62,7 +59,7 @@ namespace client {
         VRPNConnectionCollection m_conns;
     };
 
-} // namespace client
+} // namespace common
 } // namespace osvr
 
-#endif // INCLUDED_TrackerRemoteFactory_h_GUID_C473E294_CC7C_49A2_C03F_B47458E22EDB
+#endif // INCLUDED_AnalogRemoteFactory_h_GUID_F2F60718_042B_44BD_B697_50D3434C72CE

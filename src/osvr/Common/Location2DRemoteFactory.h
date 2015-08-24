@@ -6,6 +6,7 @@
     @author
     Sensics, Inc.
     <http://sensics.com/osvr>
+
 */
 
 // Copyright 2015 Sensics, Inc.
@@ -22,17 +23,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef INCLUDED_AnalogRemoteFactory_h_GUID_F2F60718_042B_44BD_B697_50D3434C72CE
-#define INCLUDED_AnalogRemoteFactory_h_GUID_F2F60718_042B_44BD_B697_50D3434C72CE
+#ifndef INCLUDED_Location2DRemoteFactory_h_GUID_CACDAC1C_FF8D_49AC_8DB5_1CA2138329D8
+#define INCLUDED_Location2DRemoteFactory_h_GUID_CACDAC1C_FF8D_49AC_8DB5_1CA2138329D8
 
 // Internal Includes
-#include "VRPNConnectionCollection.h"
+#include <osvr/Common/VRPNConnectionCollection.h>
 #include <osvr/Common/InterfaceList.h>
 #include <osvr/Common/OriginalSource.h>
 #include <osvr/Util/SharedPtr.h>
-#include "RemoteHandler.h"
-
-#include <osvr/Common/ClientContext.h>
+#include <osvr/Common/RemoteHandler.h>
 
 // Library/third-party includes
 // - none
@@ -41,14 +40,14 @@
 // - none
 
 namespace osvr {
-namespace client {
+namespace common {
 
-    class AnalogRemoteFactory {
+    class Location2DRemoteFactory {
       public:
-        AnalogRemoteFactory(VRPNConnectionCollection const &conns);
+        Location2DRemoteFactory(VRPNConnectionCollection const &conns);
 
         template <typename T> void registerWith(T &factory) const {
-            factory.addFactory("analog", *this);
+            factory.addFactory("location2D", *this);
         }
 
         shared_ptr<RemoteHandler>
@@ -59,7 +58,7 @@ namespace client {
         VRPNConnectionCollection m_conns;
     };
 
-} // namespace client
+} // namespace common
 } // namespace osvr
 
-#endif // INCLUDED_AnalogRemoteFactory_h_GUID_F2F60718_042B_44BD_B697_50D3434C72CE
+#endif // INCLUDED_Location2DRemoteFactory_h_GUID_CACDAC1C_FF8D_49AC_8DB5_1CA2138329D8

@@ -6,7 +6,6 @@
     @author
     Sensics, Inc.
     <http://sensics.com/osvr>
-
 */
 
 // Copyright 2015 Sensics, Inc.
@@ -23,15 +22,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef INCLUDED_Location2DRemoteFactory_h_GUID_CACDAC1C_FF8D_49AC_8DB5_1CA2138329D8
-#define INCLUDED_Location2DRemoteFactory_h_GUID_CACDAC1C_FF8D_49AC_8DB5_1CA2138329D8
+#ifndef INCLUDED_TrackerRemoteFactory_h_GUID_C473E294_CC7C_49A2_C03F_B47458E22EDB
+#define INCLUDED_TrackerRemoteFactory_h_GUID_C473E294_CC7C_49A2_C03F_B47458E22EDB
 
 // Internal Includes
-#include "VRPNConnectionCollection.h"
+#include <osvr/Common/VRPNConnectionCollection.h>
 #include <osvr/Common/InterfaceList.h>
 #include <osvr/Common/OriginalSource.h>
 #include <osvr/Util/SharedPtr.h>
-#include "RemoteHandler.h"
+#include <osvr/Common/RemoteHandler.h>
+
 #include <osvr/Common/ClientContext.h>
 
 // Library/third-party includes
@@ -41,14 +41,17 @@
 // - none
 
 namespace osvr {
-namespace client {
+namespace common {
 
-    class Location2DRemoteFactory {
+    class TrackerRemoteFactory {
       public:
-        Location2DRemoteFactory(VRPNConnectionCollection const &conns);
+        TrackerRemoteFactory(VRPNConnectionCollection const &conns);
 
         template <typename T> void registerWith(T &factory) const {
-            factory.addFactory("location2D", *this);
+            factory.addFactory("tracker", *this);
+            factory.addFactory("pose", *this);
+            factory.addFactory("position", *this);
+            factory.addFactory("orientation", *this);
         }
 
         shared_ptr<RemoteHandler>
@@ -59,7 +62,7 @@ namespace client {
         VRPNConnectionCollection m_conns;
     };
 
-} // namespace client
+} // namespace common
 } // namespace osvr
 
-#endif // INCLUDED_Location2DRemoteFactory_h_GUID_CACDAC1C_FF8D_49AC_8DB5_1CA2138329D8
+#endif // INCLUDED_TrackerRemoteFactory_h_GUID_C473E294_CC7C_49A2_C03F_B47458E22EDB

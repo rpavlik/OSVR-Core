@@ -9,34 +9,17 @@ set(API
     "${HEADER_LOCATION}/ViewerEyeSurface.h")
 
 set(SOURCE
-    AnalogRemoteFactory.cpp
-    AnalogRemoteFactory.h
-    ButtonRemoteFactory.cpp
-    ButtonRemoteFactory.h
     CreateContext.cpp
-    DirectionRemoteFactory.cpp
-    DirectionRemoteFactory.h
     DisplayConfig.cpp
     DisplayDescriptorSchema1.cpp
     DisplayDescriptorSchema1.h
-    EyeTrackerRemoteFactory.cpp
-    EyeTrackerRemoteFactory.h
     HandlerContainer.h
-    ImagingRemoteFactory.cpp
-    ImagingRemoteFactory.h
     InterfaceTree.cpp
     InterfaceTree.h
-    Location2DRemoteFactory.cpp
-    Location2DRemoteFactory.h
     PureClientContext.cpp
     PureClientContext.h
-    RemoteHandler.cpp
-    RemoteHandler.h
-    RemoteHandlerFactory.h
     RouterPredicates.h
     RouterTransforms.h
-    TrackerRemoteFactory.cpp
-    TrackerRemoteFactory.h
     Viewer.cpp
     ViewerEye.cpp
     ViewerEyeSurface.cpp

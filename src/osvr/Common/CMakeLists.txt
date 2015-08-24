@@ -87,6 +87,8 @@ set(API
     "${HEADER_LOCATION}/ProcessDeviceDescriptor.h"
     "${HEADER_LOCATION}/RawMessageType.h"
     "${HEADER_LOCATION}/RawSenderType.h"
+    "${HEADER_LOCATION}/RemoteHandler.h"
+    "${HEADER_LOCATION}/RemoteHandlerFactory.h"
     "${HEADER_LOCATION}/ReportFromCallback.h"
     "${HEADER_LOCATION}/ReportMap.h"
     "${HEADER_LOCATION}/ReportState.h"
@@ -107,13 +109,18 @@ set(API
     "${HEADER_LOCATION}/SystemComponent_fwd.h"
     "${HEADER_LOCATION}/Tracing.h"
     "${HEADER_LOCATION}/Transform.h"
+    "${HEADER_LOCATION}/VRPNConnectionCollection.h"
     "${CMAKE_CURRENT_BINARY_DIR}/ConfigByteSwapping.h"
     "${CMAKE_CURRENT_BINARY_DIR}/TracingConfig.h")
 
 set(SOURCE
     AddDevice.cpp
     AliasProcessor.cpp
+    AnalogRemoteFactory.cpp
+    AnalogRemoteFactory.h
     BaseDevice.cpp
+    ButtonRemoteFactory.cpp
+    ButtonRemoteFactory.h
     ClientContext.cpp
     ClientInterface.cpp
     Common.cpp
@@ -124,16 +131,24 @@ set(SOURCE
     DeviceWrapper.cpp
     DeviceWrapper.h
     DirectionComponent.cpp
+    DirectionRemoteFactory.cpp
+    DirectionRemoteFactory.h
     EyeTrackerComponent.cpp
+    EyeTrackerRemoteFactory.cpp
+    EyeTrackerRemoteFactory.h
     GeneralizedTransform.cpp
     GetEnvironmentVariable.cpp
     GetJSONStringFromTree.h
     ImagingComponent.cpp
+    ImagingRemoteFactory.cpp
+    ImagingRemoteFactory.h
     IPCRingBuffer.cpp
     IPCRingBufferResults.h
     IPCRingBufferSharedObjects.h
     JSONTransformVisitor.cpp
     Location2DComponent.cpp
+    Location2DRemoteFactory.cpp
+    Location2DRemoteFactory.h
     MessageHandler.cpp
     MessageRegistration.cpp
     NetworkClassOfService.cpp
@@ -152,6 +167,7 @@ set(SOURCE
     ProcessDeviceDescriptor.cpp
     RawMessageType.cpp
     RawSenderType.cpp
+    RemoteHandler.cpp
     ResolveFullTree.cpp
     ResolveTreeNode.cpp
     RouteContainer.cpp
@@ -160,7 +176,10 @@ set(SOURCE
     SharedMemory.h
     SharedMemoryObjectWithMutex.h
     SystemComponent.cpp
-    Tracing.cpp)
+    Tracing.cpp
+    TrackerRemoteFactory.cpp
+    TrackerRemoteFactory.h
+    VRPNConnectionCollection.cpp)
 
 osvr_add_library()
 
