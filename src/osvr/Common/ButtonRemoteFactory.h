@@ -26,11 +26,11 @@
 #define INCLUDED_ButtonRemoteFactory_h_GUID_B51EC814_96AA_4195_DACE_7B0CF376AEA8
 
 // Internal Includes
-#include "VRPNConnectionCollection.h"
+#include <osvr/Common/VRPNConnectionCollection.h>
 #include <osvr/Common/InterfaceList.h>
 #include <osvr/Common/OriginalSource.h>
 #include <osvr/Util/SharedPtr.h>
-#include "RemoteHandler.h"
+#include <osvr/Common/RemoteHandler.h>
 #include <osvr/Common/ClientContext.h>
 
 // Library/third-party includes
@@ -40,7 +40,7 @@
 // - none
 
 namespace osvr {
-namespace client {
+namespace common {
 
     class ButtonRemoteFactory {
       public:
@@ -58,7 +58,7 @@ namespace client {
         VRPNConnectionCollection m_conns;
     };
 
-} // namespace client
+} // namespace common
 } // namespace osvr
 
 #endif // INCLUDED_ButtonRemoteFactory_h_GUID_B51EC814_96AA_4195_DACE_7B0CF376AEA8

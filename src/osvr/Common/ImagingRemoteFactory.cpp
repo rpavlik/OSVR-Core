@@ -24,14 +24,12 @@
 
 // Internal Includes
 #include "ImagingRemoteFactory.h"
-#include "VRPNConnectionCollection.h"
 #include <osvr/Common/ClientContext.h>
 #include <osvr/Common/ClientInterface.h>
 #include <osvr/Common/PathTreeFull.h>
 #include <osvr/Util/ChannelCountC.h>
 #include <osvr/Util/UniquePtr.h>
 #include <osvr/Common/OriginalSource.h>
-#include "InterfaceTree.h"
 #include <osvr/Util/Verbosity.h>
 #include <osvr/Common/CreateDevice.h>
 #include <osvr/Common/ImagingComponent.h>
@@ -43,7 +41,7 @@
 // - none
 
 namespace osvr {
-namespace client {
+namespace common {
 
     class NetworkImagingRemoteHandler : public RemoteHandler {
       public:
@@ -124,5 +122,5 @@ namespace client {
         return ret;
     }
 
-} // namespace client
+} // namespace common
 } // namespace osvr

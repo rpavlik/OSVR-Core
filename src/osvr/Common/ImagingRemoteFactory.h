@@ -26,11 +26,11 @@
 #define INCLUDED_ImagingRemoteFactory_h_GUID_EA8A42BC_8509_4DBE_EFDC_66B46A33E52A
 
 // Internal Includes
-#include "VRPNConnectionCollection.h"
+#include <osvr/Common/VRPNConnectionCollection.h>
 #include <osvr/Common/InterfaceList.h>
 #include <osvr/Common/OriginalSource.h>
 #include <osvr/Util/SharedPtr.h>
-#include "RemoteHandler.h"
+#include <osvr/Common/RemoteHandler.h>
 #include <osvr/Common/ClientContext.h>
 
 // Library/third-party includes
@@ -40,7 +40,7 @@
 // - none
 
 namespace osvr {
-namespace client {
+namespace common {
 
     class ImagingRemoteFactory {
       public:
@@ -58,7 +58,7 @@ namespace client {
         VRPNConnectionCollection m_conns;
     };
 
-} // namespace client
+} // namespace common
 } // namespace osvr
 
 #endif // INCLUDED_ImagingRemoteFactory_h_GUID_EA8A42BC_8509_4DBE_EFDC_66B46A33E52A

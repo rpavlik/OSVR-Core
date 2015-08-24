@@ -24,13 +24,11 @@
 
 // Internal Includes
 #include "EyeTrackerRemoteFactory.h"
-#include "VRPNConnectionCollection.h"
 #include <osvr/Common/ClientInterface.h>
 #include <osvr/Common/PathTreeFull.h>
 #include <osvr/Util/ChannelCountC.h>
 #include <osvr/Util/UniquePtr.h>
 #include <osvr/Common/OriginalSource.h>
-#include "InterfaceTree.h"
 #include <osvr/Util/Verbosity.h>
 #include <osvr/Common/CreateDevice.h>
 
@@ -54,7 +52,7 @@
 #include <string>
 
 namespace osvr {
-namespace client {
+namespace common {
 
     class EyeTrackerRemoteHandler : public RemoteHandler {
       public:
@@ -259,5 +257,5 @@ namespace client {
         return ret;
     }
 
-} // namespace client
+} // namespace common
 } // namespace osvr

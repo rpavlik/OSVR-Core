@@ -26,7 +26,7 @@
 #define INCLUDED_AnalogRemoteFactory_h_GUID_F2F60718_042B_44BD_B697_50D3434C72CE
 
 // Internal Includes
-#include "VRPNConnectionCollection.h"
+#include <osvr/Common/VRPNConnectionCollection.h>
 #include <osvr/Common/InterfaceList.h>
 #include <osvr/Common/OriginalSource.h>
 #include <osvr/Util/SharedPtr.h>

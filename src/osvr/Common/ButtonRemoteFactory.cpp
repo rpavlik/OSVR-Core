@@ -24,13 +24,12 @@
 
 // Internal Includes
 #include "ButtonRemoteFactory.h"
-#include "VRPNConnectionCollection.h"
+#include <osvr/Common/VRPNConnectionCollection.h>
 #include <osvr/Common/ClientInterface.h>
 #include <osvr/Common/PathTreeFull.h>
 #include <osvr/Util/ChannelCountC.h>
 #include <osvr/Util/UniquePtr.h>
 #include <osvr/Common/OriginalSource.h>
-#include "InterfaceTree.h"
 #include <osvr/Util/ValueOrRange.h>
 #include <osvr/Util/Verbosity.h>
 
@@ -46,7 +45,7 @@
 // - none
 
 namespace osvr {
-namespace client {
+namespace common {
 
     class VRPNButtonHandler : public RemoteHandler {
       public:
@@ -77,8 +76,8 @@ namespace client {
             self->m_handle(info);
         }
 
-        static void VRPN_CALLBACK
-        handle_states(void *userdata, vrpn_BUTTONSTATESCB info) {
+        static void VRPN_CALLBACK handle_states(void *userdata,
+                                                vrpn_BUTTONSTATESCB info) {
             auto self = static_cast<VRPNButtonHandler *>(userdata);
             self->m_handle(info);
         }
@@ -158,5 +157,5 @@ namespace client {
         return ret;
     }
 
-} // namespace client
+} // namespace common
 } // namespace osvr

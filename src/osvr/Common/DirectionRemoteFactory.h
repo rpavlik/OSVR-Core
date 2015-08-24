@@ -27,11 +27,11 @@
 #define INCLUDED_DirectionRemoteFactory_h_GUID_9AFC82C8_7169_4BAB_1F5C_86AEFF818163
 
 // Internal Includes
-#include "VRPNConnectionCollection.h"
+#include <osvr/Common/VRPNConnectionCollection.h>
 #include <osvr/Common/InterfaceList.h>
 #include <osvr/Common/OriginalSource.h>
 #include <osvr/Util/SharedPtr.h>
-#include "RemoteHandler.h"
+#include <osvr/Common/RemoteHandler.h>
 #include <osvr/Common/ClientContext.h>
 
 // Library/third-party includes
@@ -41,7 +41,7 @@
 // - none
 
 namespace osvr {
-namespace client {
+namespace common {
 
     class DirectionRemoteFactory {
       public:
@@ -51,15 +51,15 @@ namespace client {
             factory.addFactory("direction", *this);
         }
 
-        shared_ptr<RemoteHandler>
-        operator()(common::OriginalSource const &source,
-                   common::InterfaceList &ifaces, common::ClientContext &ctx);
+        shared_ptr<RemoteHandler> operator()(OriginalSource const &source,
+                                             InterfaceList &ifaces,
+                                             ClientContext &ctx);
 
       private:
         VRPNConnectionCollection m_conns;
     };
 
-} // namespace client
+} // namespace common
 } // namespace osvr
 
 #endif // INCLUDED_DirectionRemoteFactory_h_GUID_9AFC82C8_7169_4BAB_1F5C_86AEFF818163

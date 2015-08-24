@@ -27,11 +27,11 @@
 #define INCLUDED_EyeTrackerRemoteFactory_h_GUID_6788A8FD_F38F_419F_D2F2_6FCA976CADB4
 
 // Internal Includes
-#include "VRPNConnectionCollection.h"
+#include <osvr/Common/VRPNConnectionCollection.h>
 #include <osvr/Common/InterfaceList.h>
 #include <osvr/Common/OriginalSource.h>
 #include <osvr/Util/SharedPtr.h>
-#include "RemoteHandler.h"
+#include <osvr/Common/RemoteHandler.h>
 #include <osvr/Common/ClientContext.h>
 
 // Library/third-party includes
@@ -41,7 +41,7 @@
 // - none
 
 namespace osvr {
-namespace client {
+namespace common {
 
     class EyeTrackerRemoteFactory {
       public:
@@ -59,7 +59,7 @@ namespace client {
         VRPNConnectionCollection m_conns;
     };
 
-} // namespace client
+} // namespace common
 } // namespace osvr
 
 #endif // INCLUDED_EyeTrackerRemoteFactory_h_GUID_6788A8FD_F38F_419F_D2F2_6FCA976CADB4
