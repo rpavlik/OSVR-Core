@@ -4,6 +4,7 @@ include("${CMAKE_CURRENT_SOURCE_DIR}/DelayLoad.cmake")
 include("${CMAKE_CURRENT_SOURCE_DIR}/GenerateForReportTypes.cmake")
 include("${CMAKE_CURRENT_SOURCE_DIR}/Macros.cmake")
 
+add_subdirectory(TypePack)
 add_subdirectory(Util)
 add_subdirectory(Common)
 

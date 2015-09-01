@@ -85,8 +85,6 @@ set(API
     "${HEADER_LOCATION}/TreeNode.h"
     "${HEADER_LOCATION}/TreeNode_fwd.h"
     "${HEADER_LOCATION}/TreeTraversalVisitor.h"
-    "${HEADER_LOCATION}/TypePack.h"
-    "${HEADER_LOCATION}/TypePackRuntime.h"
     "${HEADER_LOCATION}/UniquePtr.h"
     "${HEADER_LOCATION}/UniqueContainer.h"
     "${HEADER_LOCATION}/Util.h"
@@ -132,7 +130,13 @@ install(FILES "${CMAKE_CURRENT_BINARY_DIR}/ClientCallbackTypesC.h"
     COMPONENT Devel)
 
 # TODO VRPN used in this lib only for gettimeofday wrapper: do we need it?
-target_link_libraries(${LIBNAME_FULL} PRIVATE vendored-vrpn eigen-headers)
+target_link_libraries(${LIBNAME_FULL}
+    PRIVATE
+    vendored-vrpn
+    eigen-headers
+    osvrTypePack
+    PUBLIC
+    $<BUILD_INTERFACE:osvrTypePack>)
 
 ###
 # C++ util library/headers

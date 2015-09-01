@@ -426,9 +426,14 @@ write_basic_package_version_file(
     VERSION ${OSVR_VERSION}
     COMPATIBILITY AnyNewerVersion)
 
-export(EXPORT osvrTargets
+# Export the targets we want in the build tree.
+# TODO exporting osvr_cxx11_flags means the build tree (only) is fairly compiler-specific
+export(TARGETS
+    ${OSVR_BUILDTREE_TARGETS}
+    osvr_cxx11_flags
     FILE "${CMAKE_CURRENT_BINARY_DIR}/osvrTargets.cmake"
-    NAMESPACE osvr::)
+    NAMESPACE osvr::
+)
 
 # Register the current build dir as a package search location
 export(PACKAGE osvr)
