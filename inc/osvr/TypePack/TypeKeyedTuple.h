@@ -25,6 +25,7 @@
 #include "Apply.h"
 #include "Transform.h"
 #include "ApplyList.h"
+#include "Quote.h"
 
 // Library/third-party includes
 // - none
@@ -34,14 +35,6 @@
 
 namespace osvr {
 namespace typepack {
-
-    namespace detail {
-        struct make_tuple {
-            template <typename... Ts> struct apply {
-                using type = std::tuple<Ts...>;
-            };
-        };
-    } // namespace detail
 
     /// @brief Provides a data structure where a value of heterogeneous data
     /// types may be stored at runtime for each of the "key" types in a list.
@@ -60,7 +53,7 @@ namespace typepack {
         using value_types = transform<KeyList, ComputeValueTypes>;
 
       public:
-        using container_type = apply_list<detail::make_tuple, value_types>;
+        using container_type = apply_list<quote<std::tuple>, value_types>;
         using key_types = KeyList;
 
         template <typename Key>
