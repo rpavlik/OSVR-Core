@@ -31,7 +31,7 @@
 #include <osvr/TypePack/List.h>
 
 // Library/third-party includes
-#include <boost/mpl/vector.hpp>
+// - none
 
 // Standard includes
 // - none
@@ -42,13 +42,6 @@ namespace common {
     /// specially-handled reports.
     namespace traits {
         /// @brief A typelist containing all specially-handled report types.
-        typedef boost::mpl::vector<
-            OSVR_AnalogReport, OSVR_ButtonReport, OSVR_PoseReport,
-            OSVR_PositionReport, OSVR_OrientationReport, OSVR_ImagingReport,
-            OSVR_Location2DReport, OSVR_DirectionReport,
-            OSVR_EyeTracker2DReport, OSVR_EyeTracker3DReport,
-            OSVR_EyeTrackerBlinkReport, OSVR_NaviVelocityReport,
-            OSVR_NaviPositionReport> ReportTypes;
         using ReportTypeList =
             typepack::list<OSVR_AnalogReport, OSVR_ButtonReport,
                            OSVR_PoseReport, OSVR_PositionReport,
