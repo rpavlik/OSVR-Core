@@ -27,6 +27,7 @@
 
 // Internal Includes
 #include <osvr/Util/ClientCallbackTypesC.h>
+#include <osvr/TypePack/List.h>
 
 // Library/third-party includes
 #include <boost/mpl/vector.hpp>
@@ -46,7 +47,13 @@ namespace common {
             OSVR_Location2DReport, OSVR_DirectionReport,
             OSVR_EyeTracker2DReport, OSVR_EyeTracker3DReport,
             OSVR_EyeTrackerBlinkReport> ReportTypes;
-
+        using ReportTypeList =
+            typepack::list<OSVR_AnalogReport, OSVR_ButtonReport,
+                           OSVR_PoseReport, OSVR_PositionReport,
+                           OSVR_OrientationReport, OSVR_ImagingReport,
+                           OSVR_Location2DReport, OSVR_DirectionReport,
+                           OSVR_EyeTracker2DReport, OSVR_EyeTracker3DReport,
+                           OSVR_EyeTrackerBlinkReport>;
     } // namespace traits
 
 } // namespace common
