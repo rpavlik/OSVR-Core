@@ -337,7 +337,7 @@ inline std::string getDeviceHumanDesc(IMoniker &mon) {
 }
 
 bool directx_camera_server::start_com_and_graphbuilder() {
-    HRESULT hr;
+
 //-------------------------------------------------------------------
 // Create COM and DirectX objects needed to access a video stream.
 
@@ -420,7 +420,8 @@ inline WinPtr<IMoniker> find_first_capture_device_where(F &&f) {
     while (pClassEnum->Next(1, AttachPtr(pMoniker), nullptr) == S_OK) {
 
 #ifdef VERBOSE_ENUM
-        printf("- '%s' at path:\n  '%s'\n\n", getDeviceHumanDesc(*pMoniker).c_str(),
+        printf("- '%s' at path:\n  '%s'\n\n",
+               getDeviceHumanDesc(*pMoniker).c_str(),
                getDevicePath(*pMoniker).c_str());
 #endif // VERBOSE_ENUM
 
@@ -437,7 +438,8 @@ inline WinPtr<IMoniker> find_first_capture_device_where(F &&f) {
     }
 
 #ifdef VERBOSE_ENUM
-    printf("\ndirectx_camera_server find_first_capture_device_where(): End enumeration.\n\n");
+    printf("\ndirectx_camera_server find_first_capture_device_where(): End "
+           "enumeration.\n\n");
 #endif
 
     if (!ret) {
