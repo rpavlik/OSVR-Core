@@ -26,18 +26,15 @@
 #define INCLUDED_InterfaceState_h_GUID_FFF8951B_3677_4EB5_373A_3A1A697AECDE
 
 // Internal Includes
-#include <osvr/Common/ReportMap.h>
+#include <osvr/Common/ReportTypes.h>
 #include <osvr/Common/StateType.h>
 #include <osvr/Common/ReportState.h>
 #include <osvr/Util/TimeValue.h>
 #include <osvr/Common/Tracing.h>
 #include <osvr/TypePack/TypeKeyedTuple.h>
-#include <osvr/TypePack/QuoteTrait.h>
+#include <osvr/TypePack/Quote.h>
 
 // Library/third-party includes
-#include <boost/fusion/include/has_key.hpp>
-#include <boost/fusion/include/at_key.hpp>
-#include <boost/mpl/placeholders.hpp>
 #include <boost/optional.hpp>
 
 // Standard includes
@@ -58,12 +55,10 @@ namespace common {
     template <typename ReportType>
     using StateMapValueType = boost::optional<StateMapContents<ReportType>>;
 
-    using MakeStateMapValue = typepack::quote<StateMapValueType>;
-
     /// @brief Data structure mapping from a report type to an optional state
     /// value.
     using StateMap =
-        typepack::TypeKeyedTuple<traits::ReportTypeList, MakeStateMapValue>;
+        typepack::TypeKeyedTuple<traits::ReportTypeList, typepack::quote<StateMapValueType>>;
 
     /// @brief Class to maintain state for an interface for each report (and
     /// thus state) type explicitly enumerated.
@@ -74,16 +69,16 @@ namespace common {
                                 ReportType const &report) {
             using typepack::get;
             if (hasState<ReportType>()) {
-                auto &oldTimestamp = get<ReportType>(m_states)->timestamp;
-                if (osvrTimeValueGreater(oldTimestamp, timestamp)) {
+                if (osvrTimeValueGreater(get<ReportType>(m_states)->timestamp, timestamp)) {
                     tracing::markTimestampOutOfOrder();
                     return;
                 }
             }
+            auto & state = get<ReportType>(m_states);
             StateMapContents<ReportType> c;
             c.state = reportState(report);
             c.timestamp = timestamp;
-            get<ReportType>(m_states) = c;
+            state = c;
             m_hasState = true;
         }
 

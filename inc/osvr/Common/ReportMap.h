@@ -1,6 +1,8 @@
 /** @file
     @brief Header
 
+    @todo REMOVE THIS HEADER
+
     @date 2014
 
     @author
@@ -25,6 +27,7 @@
 #ifndef INCLUDED_ReportMap_h_GUID_E6AD6837_0C7A_4FAF_0639_4F11821AEE65
 #define INCLUDED_ReportMap_h_GUID_E6AD6837_0C7A_4FAF_0639_4F11821AEE65
 
+#if 0
 // Internal Includes
 #include <osvr/Common/ReportTypes.h>
 
@@ -72,4 +75,6 @@ namespace common {
     } // namespace traits
 } // namespace common
 } // namespace osvr
+
+#endif
 #endif // INCLUDED_ReportMap_h_GUID_E6AD6837_0C7A_4FAF_0639_4F11821AEE65
