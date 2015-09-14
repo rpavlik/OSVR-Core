@@ -45,7 +45,7 @@ namespace common {
     /// @brief A templated type containing state and a timestamp for known,
     /// specialized report types.
     template <typename ReportType> struct StateMapContents {
-        using state_type = typepack::t_<traits::StateType<ReportType>>;
+        using state_type = traits::StateFromReport_t<ReportType>;
         state_type state;
         util::time::TimeValue timestamp;
     };
@@ -58,7 +58,8 @@ namespace common {
     /// @brief Data structure mapping from a report type to an optional state
     /// value.
     using StateMap =
-        typepack::TypeKeyedTuple<traits::ReportTypeList, typepack::quote<StateMapValueType>>;
+        typepack::TypeKeyedTuple<traits::ReportTypeList,
+                                 typepack::quote<StateMapValueType>>;
 
     /// @brief Class to maintain state for an interface for each report (and
     /// thus state) type explicitly enumerated.
@@ -68,13 +69,14 @@ namespace common {
         void setStateFromReport(util::time::TimeValue const &timestamp,
                                 ReportType const &report) {
             using typepack::get;
+            StateMapValueType<ReportType> &state =
+                typepack::get<ReportType>(m_states);
             if (hasState<ReportType>()) {
-                if (osvrTimeValueGreater(get<ReportType>(m_states)->timestamp, timestamp)) {
+                if (osvrTimeValueGreater(state->timestamp, timestamp)) {
                     tracing::markTimestampOutOfOrder();
                     return;
                 }
             }
-            auto & state = get<ReportType>(m_states);
             StateMapContents<ReportType> c;
             c.state = reportState(report);
             c.timestamp = timestamp;
@@ -83,8 +85,7 @@ namespace common {
         }
 
         template <typename ReportType> bool hasState() const {
-            using typepack::get;
-            return m_hasState && bool(get<ReportType>(m_states));
+            return m_hasState && bool(typepack::get<ReportType>(m_states));
         }
 
         bool hasAnyState() const { return m_hasState; }
