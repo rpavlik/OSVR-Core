@@ -33,8 +33,29 @@
 #endif
 #endif
 
+#if defined(__clang__)
+#define OSVR_HAVE_DIAGNOSTIC_PUSH
+#endif
+
+// GCC 4.6 and up
+#if !defined(OSVR_HAVE_DIAGNOSTIC_PUSH) && defined(__GNUC__) &&                \
+    ((__GNUC__ > 4) || ((__GNUC_ == 4) && (__GNUC_MINOR__ >= 6)))
+#define OSVR_HAVE_DIAGNOSTIC_PUSH
+#endif
+
+#ifdef OSVR_HAVE_DIAGNOSTIC_PUSH
+/// For binder1st deprecation in C++11
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif // OSVR_HAVE_DIAGNOSTIC_PUSH
+
 #include <Eigen/Core>
 #include <Eigen/Geometry>
+
+#ifdef OSVR_HAVE_DIAGNOSTIC_PUSH
+#pragma GCC diagnostic pop
+#undef OSVR_HAVE_DIAGNOSTIC_PUSH
+#endif // OSVR_HAVE_DIAGNOSTIC_PUSH
 
 #if 0
 #ifdef _MSC_VER
