@@ -1,6 +1,6 @@
 set(tests JointClientKit)
-if(BUILD_SERVER_EXAMPLES) # need the AnalogSync example
-    list(APPEND tests JointClientKitWithInterface)
+if(BUILD_SERVER_EXAMPLES) # need the AnalogSync and example
+    list(APPEND tests JointClientKitWithInterface JointClientKitWithAsyncInterface)
 endif()
 foreach(test ${tests})
     add_executable(Test${test}
