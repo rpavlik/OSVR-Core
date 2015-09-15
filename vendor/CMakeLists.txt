@@ -6,6 +6,61 @@ if(BUILD_TESTING)
 endif()
 set(BUILD_SHARED_LIBS OFF)
 
+
+###
+# ETWProviders from UIforETW
+set(ETWROOT "${CMAKE_CURRENT_SOURCE_DIR}/UIforETWbins")
+set(ETWPROVIDERS_FOUND "FALSE" CACHE INTERNAL "" FORCE)
+
+if(WIN32)
+    set(ETWSUFFIX)
+    if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+        set(ETWSUFFIX 64)
+    endif()
+    set(ETWPROVIDERS_RUNTIME_LIBRARY "${ETWROOT}/bin/ETWProviders${ETWSUFFIX}.dll")
+    if(EXISTS "${ETWPROVIDERS_RUNTIME_LIBRARY}")
+        add_library(ETWProviders INTERFACE)
+        target_include_directories(ETWProviders INTERFACE "${ETWROOT}/include")
+        # set_target_properties(ETWProviders PROPERTIES
+        #     INTERFACE_INCLUDE_DIRECTORIES "${ETWROOT}/include")
+        if(NOT MSVC)
+            target_include_directories(ETWProviders INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/dummy-sal")
+        endif()
+        if(MINGW)
+            target_link_libraries(ETWProviders INTERFACE "${ETWPROVIDERS_RUNTIME_LIBRARY}")
+        else()
+            target_link_libraries(ETWProviders INTERFACE "${ETWROOT}/lib/ETWProviders${ETWSUFFIX}.lib")
+        endif()
+        set(ETWPROVIDERS_LIBRARY ETWProviders CACHE INTERNAL "" FORCE)
+        set(ETWPROVIDERS_RUNTIME_LIBRARY "${ETWPROVIDERS_RUNTIME_LIBRARY}" CACHE INTERNAL "" FORCE)
+        set(ETWPROVIDERS_MANIFEST "${ETWROOT}/bin/ETWProviders.man" CACHE INTERNAL "" FORCE)
+        set(ETWPROVIDERS_FOUND "TRUE" CACHE INTERNAL "" FORCE)
+        # set_target_properties(ETWProviders PROPERTIES
+        #     IMPORTED_IMPLIB "${ETWROOT}/lib/ETWProviders${ETWSUFFIX}.lib"
+        #     IMPORTED_LOCATION "${ETWPROVIDERS_RUNTIME_LIBRARY}"
+        # )
+    else()
+        message(STATUS "UIforETWbins submodule missing, so ETW-based tracing unavailable.")
+    endif()
+endif()
+
+# ETW README
+if(ETWPROVIDERS_FOUND)
+    # Trigger CMake if this file changes.
+    configure_file("${ETWROOT}/README.md" "${CMAKE_CURRENT_BINARY_DIR}/README.junk" COPYONLY)
+
+    # Extract the release URL, which is always on its own line in the submodule readme.
+    file(STRINGS "${CMAKE_CURRENT_BINARY_DIR}/README.junk" UIFORETW_RELEASE
+        LIMIT_COUNT 1
+        REGEX "^<.*>$")
+
+    # Set the location for the generated README file, for use further up in the build system.
+    set(ETWPROVIDERS_OSVR_README "${CMAKE_CURRENT_BINARY_DIR}/README-ETW.md" CACHE INTERNAL "" FORCE)
+
+    # Actually do the generation, to put the release URL in the readme we'll distribute.
+    configure_file("README-ETW.md.in" "${ETWPROVIDERS_OSVR_README}" @ONLY)
+endif()
+
 if(NOT (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vrpn/vrpn_Connection.h" AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vrpn/submodules/hidapi/hidapi/hidapi.h"))
 	message(FATAL_ERROR "You are missing the VRPN git submodule or one of its submodules- you must have not done a recursive clone. You can get it now by running git submodule update --init --recursive from the root source directory.")
 endif()
@@ -63,56 +118,3 @@ target_include_directories(com_smart_pointer INTERFACE "${CMAKE_CURRENT_SOURCE_D
 add_library(eigen-headers INTERFACE)
 target_include_directories(eigen-headers INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/eigen-3.2.5")
 target_compile_definitions(eigen-headers INTERFACE EIGEN_MPL2_ONLY)
-
-###
-# ETWProviders from UIforETW
-set(ETWROOT "${CMAKE_CURRENT_SOURCE_DIR}/UIforETWbins")
-set(ETWPROVIDERS_FOUND "FALSE" CACHE INTERNAL "" FORCE)
-
-if(WIN32)
-    set(ETWSUFFIX)
-    if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-        set(ETWSUFFIX 64)
-    endif()
-    set(ETWPROVIDERS_RUNTIME_LIBRARY "${ETWROOT}/bin/ETWProviders${ETWSUFFIX}.dll")
-    if(EXISTS "${ETWPROVIDERS_RUNTIME_LIBRARY}")
-        add_library(ETWProviders INTERFACE)
-        target_include_directories(ETWProviders INTERFACE "${ETWROOT}/include")
-        # set_target_properties(ETWProviders PROPERTIES
-        #     INTERFACE_INCLUDE_DIRECTORIES "${ETWROOT}/include")
-        if(NOT MSVC)
-            target_include_directories(ETWProviders INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/dummy-sal")
-        endif()
-        if(MINGW)
-            target_link_libraries(ETWProviders INTERFACE "${ETWPROVIDERS_RUNTIME_LIBRARY}")
-        else()
-            target_link_libraries(ETWProviders INTERFACE "${ETWROOT}/lib/ETWProviders${ETWSUFFIX}.lib")
-        endif()
-        set(ETWPROVIDERS_RUNTIME_LIBRARY "${ETWPROVIDERS_RUNTIME_LIBRARY}" CACHE INTERNAL "" FORCE)
-        set(ETWPROVIDERS_MANIFEST "${ETWROOT}/bin/ETWProviders.man" CACHE INTERNAL "" FORCE)
-        set(ETWPROVIDERS_FOUND "TRUE" CACHE INTERNAL "" FORCE)
-        # set_target_properties(ETWProviders PROPERTIES
-        #     IMPORTED_IMPLIB "${ETWROOT}/lib/ETWProviders${ETWSUFFIX}.lib"
-        #     IMPORTED_LOCATION "${ETWPROVIDERS_RUNTIME_LIBRARY}"
-        # )
-    else()
-        message(STATUS "UIforETWbins submodule missing, so ETW-based tracing unavailable.")
-    endif()
-endif()
-
-# ETW README
-if(ETWPROVIDERS_FOUND)
-    # Trigger CMake if this file changes.
-    configure_file("${ETWROOT}/README.md" "${CMAKE_CURRENT_BINARY_DIR}/README.junk" COPYONLY)
-
-    # Extract the release URL, which is always on its own line in the submodule readme.
-    file(STRINGS "${CMAKE_CURRENT_BINARY_DIR}/README.junk" UIFORETW_RELEASE
-        LIMIT_COUNT 1
-        REGEX "^<.*>$")
-
-    # Set the location for the generated README file, for use further up in the build system.
-    set(ETWPROVIDERS_OSVR_README "${CMAKE_CURRENT_BINARY_DIR}/README-ETW.md" CACHE INTERNAL "" FORCE)
-
-    # Actually do the generation, to put the release URL in the readme we'll distribute.
-    configure_file("README-ETW.md.in" "${ETWPROVIDERS_OSVR_README}" @ONLY)
-endif()
