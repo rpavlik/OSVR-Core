@@ -72,7 +72,7 @@ namespace common {
             StateMapValueType<ReportType> &state =
                 typepack::get<ReportType>(m_states);
             if (hasState<ReportType>()) {
-                if (osvrTimeValueGreater(state->timestamp, timestamp)) {
+                if (state->timestamp > timestamp) {
                     tracing::markTimestampOutOfOrder();
                     return;
                 }
