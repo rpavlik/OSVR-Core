@@ -94,7 +94,16 @@ namespace vbtracker {
         /// `identified()` is true.
         bool isBright() const { return m_lastBright; }
 
+        /// @brief In cases where an LED has gotten tracked on to a faulty image
+        /// point, this can be signalled up by flagging it as faulty.
+        void flagAsFaulty();
+
+        bool isFlaggedAsFaulty() const {
+            return getID() == FAULTY;
+        }
+
       private:
+        static const int FAULTY = -4;
         /// Starting from current frame going backwards
         BrightnessList m_brightnessHistory;
 

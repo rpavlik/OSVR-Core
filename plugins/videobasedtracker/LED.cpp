@@ -87,5 +87,10 @@ namespace vbtracker {
         return end(keypoints);
     }
 
+    void Led::flagAsFaulty() {
+        m_brightnessHistory.clear();
+        m_id = FAULTY;
+    }
+
 } // End namespace vbtracker
 } // End namespace osvr

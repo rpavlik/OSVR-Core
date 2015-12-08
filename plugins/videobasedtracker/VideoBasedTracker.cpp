@@ -123,19 +123,28 @@ namespace vbtracker {
             auto e = end(m_led_groups[sensor]);
             while (led != e) {
                 double TODO_BLOB_MOVE_THRESHOLD = 10;
-                auto nearest =
-                    led->nearest(keyPoints, TODO_BLOB_MOVE_THRESHOLD);
-                if (nearest == keyPoints.end()) {
-                    // We have no blob corresponding to this LED, so we need
-                    // to delete this LED.
+                if (led->isFlaggedAsFaulty()) {
+                    // Further down the line, we were told this LED association
+                    // was faulty.
                     led = m_led_groups[sensor].erase(led);
+
                 } else {
-                    // Update the values in this LED and then go on to the
-                    // next one.  Remove this blob from the list of potential
-                    // matches.
-                    led->addMeasurement(nearest->pt, nearest->size);
-                    keyPoints.erase(nearest);
-                    ++led;
+                    auto nearest =
+                        led->nearest(keyPoints, TODO_BLOB_MOVE_THRESHOLD);
+
+                    if (nearest == keyPoints.end()) {
+                        // We have no blob corresponding to this LED, so we need
+                        // to delete this LED.
+                        led = m_led_groups[sensor].erase(led);
+                    } else {
+                        // Update the values in this LED and then go on to the
+                        // next one.  Remove this blob from the list of
+                        // potential
+                        // matches.
+                        led->addMeasurement(nearest->pt, nearest->size);
+                        keyPoints.erase(nearest);
+                        ++led;
+                    }
                 }
             }
             // If we have any blobs that have not been associated with an

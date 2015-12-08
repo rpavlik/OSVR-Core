@@ -128,7 +128,7 @@ namespace vbtracker {
 
         /// @brief The internals of m_estimatePoseFromLeds that use a Kalman
         /// filter with beacon position auto-calibration to compute an estimate.
-        bool m_kalmanAutocalibEstimator(const LedGroup &leds, double dt);
+        bool m_kalmanAutocalibEstimator(LedGroup &leds, double dt);
 
         /// @brief Resets the Kalman filter main state based on the
         /// direct-calculation outputs.

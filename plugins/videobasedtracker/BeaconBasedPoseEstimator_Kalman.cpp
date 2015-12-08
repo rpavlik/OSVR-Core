@@ -115,7 +115,7 @@ namespace vbtracker {
         kalman::predict(m_state, m_model, dt);
         auto numBad = std::size_t{0};
         auto numGood = std::size_t{0};
-        for (auto const &led : leds) {
+        for (auto &led : leds) {
             if (!led.identified()) {
                 continue;
             }
@@ -136,8 +136,7 @@ namespace vbtracker {
 
             if (meas.getResidual(state).squaredNorm() > MAX_SQUARED_RESIDUAL) {
                 // probably bad
-                std::cout << "skipping a measurement with a high residual: id "
-                          << id << std::endl;
+                std::cout << "bad beacon data: id " << id << std::endl;
                 numBad++;
                 continue;
             }
