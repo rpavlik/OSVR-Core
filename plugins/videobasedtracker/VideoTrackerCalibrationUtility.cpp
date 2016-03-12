@@ -140,6 +140,10 @@ class TrackerCalibrationApp {
         // attempts to calibrate the back panel, since it's not rigidly attached
         // to the front panel.
         static const int MAX_BEACONS_TO_SHOW = 34;
+        /// these are beacon IDs we disabled (1-based)
+        static const auto IDS_TO_SKIP = std::unordered_set<std::size_t>{
+            1,  2,  10, 12, 13,
+            14, 21};
 
         while (!m_quit) {
             bool gotDebugData = false;
@@ -162,6 +166,11 @@ class TrackerCalibrationApp {
                     auto nBeaconsActive = size_t{0};
                     auto nBeaconsIdentified = size_t{0};
                     for (decltype(nBeacons) i = 0; i < nBeacons; ++i) {
+                        if (IDS_TO_SKIP.find(i + 1) != end(IDS_TO_SKIP)) {
+                            // skip showing this beacon since it's not used for
+                            // tracking.
+                            continue;
+                        }
                         if (debugData[i].measurement.x != 0) {
                             nBeaconsIdentified++;
                         }
