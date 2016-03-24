@@ -143,8 +143,19 @@ OSVR_PLUGINKIT_EXPORT OSVR_ReturnCode osvrPluginRegisterDataWithDeleteCallback(
     OSVR_INOUT_PTR void *pluginData) OSVR_FUNC_NONNULL((1, 2, 3));
 /** @} */
 
+/** @brief Trigger system-wide hardware detection.
+
+   This causes each plugin's hardware detection callback to be called prior to
+   the next run of the server main loop.
+
+   @param ctx The registration context passed to your entry point.
+*/
+OSVR_PLUGINKIT_EXPORT OSVR_ReturnCode osvrPluginTriggerHardwareDetect(
+    OSVR_INOUT_PTR OSVR_PluginRegContext ctx) OSVR_FUNC_NONNULL((1));
+
 OSVR_EXTERN_C_END
 
 /** @} */
 
-#endif
+#endif /* INCLUDED_PluginRegistrationC_h_GUID_C019DFA9_5B54_4791_B0A4_040EA20501BA */
+
