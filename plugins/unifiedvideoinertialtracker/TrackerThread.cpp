@@ -47,6 +47,13 @@ namespace vbtracker {
         : m_trackingSystem(trackingSystem), m_cam(imageSource),
           m_reportingVec(reportingVec), m_camParams(camParams) {
         msg() << "Tracker thread object created." << std::endl;
+
+        m_blobFile.open("blobs.csv");
+        if (m_blobFile) {
+            m_blobFile << "sec,usec,x,y,size" << std::endl;
+        } else {
+            warn() << "Could not open blob file!" << std::endl;
+        }
     }
     TrackerThread::~TrackerThread() {
         if (m_imageThread.joinable()) {
@@ -371,6 +378,16 @@ namespace vbtracker {
         // processing.
         m_imageData = m_trackingSystem.performInitialImageProcessing(
             m_triggerTime, m_frame, m_frameGray, m_camParams);
+
+        if (m_blobFile) {
+            m_blobFile << m_imageData->tv.seconds << ","
+                       << m_imageData->tv.microseconds;
+            for (auto &measurement : m_imageData->ledMeasurements) {
+                m_blobFile << "," << measurement.loc.x << ","
+                           << measurement.loc.y << "," << measurement.diameter;
+            }
+            m_blobFile << "\n";
+        }
     }
 } // namespace vbtracker
 } // namespace osvr

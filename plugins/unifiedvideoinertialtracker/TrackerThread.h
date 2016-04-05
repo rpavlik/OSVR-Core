@@ -41,6 +41,7 @@
 #include <boost/variant.hpp>
 
 // Standard includes
+#include <fstream>
 #include <iosfwd>
 #include <queue>
 #include <thread>
@@ -154,6 +155,9 @@ namespace vbtracker {
         std::queue<MessageEntry> m_messages;
         bool m_timeConsumingImageStepComplete = false;
         /// @}
+
+        /// Output file we stream data on the blobs to.
+        std::ofstream m_blobFile;
 
         /// The thread used by timeConsumingImageStep()
         std::thread m_imageThread;
