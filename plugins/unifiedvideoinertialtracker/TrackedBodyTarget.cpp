@@ -24,26 +24,29 @@
 
 // Internal Includes
 #include "TrackedBodyTarget.h"
-#include "TrackedBody.h"
-#include "LED.h"
-#include "cvToEigen.h"
+#include "BodyTargetInterface.h"
 #include "HDKLedIdentifier.h"
+#include "LED.h"
 #include "PoseEstimatorTypes.h"
 #include "PoseEstimator_RANSAC.h"
-#include "PoseEstimator_SCAATKalman.h"
 #include "PoseEstimator_RANSACKalman.h"
-#include "BodyTargetInterface.h"
+#include "PoseEstimator_SCAATKalman.h"
+#include "TrackedBody.h"
+#include "cvToEigen.h"
+#include <osvr/Util/CSV.h>
 
 // Library/third-party includes
 #include <boost/assert.hpp>
 #include <util/Stride.h>
 
 // Standard includes
+#include <fstream>
 #include <iostream>
 
 /// Define this to use the RANSAC Kalman instead of the autocalibrating SCAAT
 /// Kalman, primarily for troubleshooting purposes.
 #undef OSVR_RANSACKALMAN
+#define OSVR_DUMP_BEACONS_TO_CSV
 
 namespace osvr {
 namespace vbtracker {
@@ -92,8 +95,15 @@ namespace vbtracker {
         std::size_t m_framesWithoutValidBeacons = 0;
     };
     struct TrackedBodyTarget::Impl {
-        Impl(ConfigParams const &params, BodyTargetInterface const &bodyIface)
-            : bodyInterface(bodyIface), kalmanEstimator(params) {}
+        Impl(ConfigParams const &params, BodyTargetInterface const &bodyIface,
+             TargetId id)
+            : bodyInterface(bodyIface), kalmanEstimator(params), ledDataFile(),
+              csv(ledDataFile) {
+#ifdef OSVR_DUMP_BEACONS_TO_CSV
+            ledDataFile.open("target_leds_" + std::to_string(id.value()) +
+                             ".csv");
+#endif
+        }
         BodyTargetInterface bodyInterface;
         LedGroup leds;
         LedPtrList usableLeds;
@@ -109,6 +119,8 @@ namespace vbtracker {
         TargetTrackingState trackingState = TargetTrackingState::RANSAC;
         bool hasPrev = false;
         osvr::util::time::TimeValue lastEstimate;
+        std::ofstream ledDataFile;
+        util::StreamCSV csv;
     };
 
     inline BeaconStateVec createBeaconStateVec(ConfigParams const &params,
@@ -160,13 +172,27 @@ namespace vbtracker {
           m_beaconMeasurementVariance(setupData.baseMeasurementVariances),
           m_beaconFixed(setupData.isFixed),
           m_beaconEmissionDirection(setupData.emissionDirections),
-          m_impl(new Impl(getParams(), bodyIface)) {
+          m_impl(new Impl(getParams(), bodyIface, id)) {
 
         /// Create the beacon state objects and initialize the beacon offset.
         m_beacons =
             createBeaconStateVec(getParams(), setupData, m_beaconOffset);
         /// Create the beacon debug data
         m_beaconDebugData.resize(m_beacons.size());
+
+#ifdef OSVR_DUMP_BEACONS_TO_CSV
+        /// Set up/"preload" columns
+        m_impl->csv.getColumn("sec");
+        m_impl->csv.getColumn("usec");
+        auto n = m_beacons.size();
+        for (decltype(n) i = 0; i < n; ++i) {
+            m_impl->csv.getColumn("x." + std::to_string(i + 1));
+            m_impl->csv.getColumn("y." + std::to_string(i + 1));
+            m_impl->csv.getColumn("size." + std::to_string(i + 1));
+        }
+        /// and start streaming.
+        m_impl->csv.startOutput();
+#endif
 
         {
             /// Create the LED identifier
@@ -302,6 +328,21 @@ namespace vbtracker {
         /// Do the initial filtering of the LED group to just the identified
         /// ones before we pass it to an estimator.
         updateUsableLeds();
+#ifdef OSVR_DUMP_BEACONS_TO_CSV
+
+        {
+            using namespace osvr::util;
+            auto row = m_impl->csv.row();
+            row << cell("sec", tv.seconds) << cell("usec", tv.microseconds);
+            for (auto &ledPtr : usableLeds()) {
+                auto idString = std::to_string(ledPtr->getOneBasedID().value());
+                row << cell("x." + idString, ledPtr->getLocation().x)
+                    << cell("y." + idString, ledPtr->getLocation().y)
+                    << cell("size." + idString,
+                            ledPtr->getMeasurement().diameter);
+            }
+        }
+#endif
 
         /// Must pre/post correct the state by our offset :-/
         /// @todo make this state correction less hacky.
